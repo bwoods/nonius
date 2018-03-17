@@ -49,6 +49,11 @@ namespace nonius {
                 stored_object().~T();
             }
 
+            T& stored_object()
+            {
+                return *static_cast<T*>(static_cast<void*>(&data));
+            }
+
         private:
             // If this is a constructor benchmark, destruct the underlying object
             template <typename U>
@@ -56,11 +61,6 @@ namespace nonius {
             // Otherwise, don't
             template <typename U>
             void destruct_on_exit(typename std::enable_if<!Destruct, U>::type* = 0) { }
-
-            T& stored_object()
-            {
-                return *static_cast<T*>(static_cast<void*>(&data));
-            }
 
             TStorage data;
         };
